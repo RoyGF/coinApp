@@ -1,4 +1,4 @@
-package com.roygf.coinapp
+package com.roygf.coinapp.presentation
 
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
@@ -9,6 +9,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import com.roygf.coinapp.R
 import com.roygf.coinapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
