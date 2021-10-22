@@ -9,8 +9,10 @@ import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.roygf.coinapp.R
 import com.roygf.coinapp.databinding.FragmentFirstBinding
 import com.roygf.coinapp.presentation.coin_list.common.adapters.CoinAdapter
@@ -72,9 +74,9 @@ class FirstFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         binding.spinner.onItemSelectedListener = this
 
-        //binding.buttonFirst.setOnClickListener {
-        //    findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-        //}
+        binding.favButton.setOnClickListener {
+            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        }
     }
 
     override fun onDestroyView() {

@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.roygf.coinapp.presentation.SecondFragment"
+        android:name="com.roygf.coinapp.presentation.favourites.fragments.SecondFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
 
