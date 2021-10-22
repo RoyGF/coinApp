@@ -19,12 +19,4 @@ class NetworkRepositoryImpl @Inject constructor(private val api:Api) : NetworkRe
             CoinCache.coinList
         }
     }
-
-    override suspend fun getFavoriteCoins(): List<Coin> {
-        return emptyList()
-    }
-
-    override suspend fun setFavoriteCoin(coin: Coin?) {
-        // todo implement this method
-    }
 }

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.roygf.coinapp.databinding.FragmentFirstBinding
 import com.roygf.coinapp.presentation.coin_list.common.adapters.CoinAdapter
+import com.roygf.coinapp.presentation.coin_list.common.adapters.CoinClickListener
 import com.roygf.coinapp.presentation.coin_list.view_model.CoinListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -35,6 +36,9 @@ class FirstFragment : Fragment() {
 
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        coinAdapter.setListener(CoinClickListener {
+            coinListViewModel.makeFavoriteCoin(it)
+        })
         recyclerView.adapter = coinAdapter
 
         return binding.root
