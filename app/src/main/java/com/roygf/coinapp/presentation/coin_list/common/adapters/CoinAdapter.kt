@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.roygf.coinapp.R
 import com.roygf.coinapp.core.Coin
 import com.roygf.coinapp.databinding.ItemCoinBinding
@@ -17,15 +18,14 @@ open class CoinAdapter @Inject constructor() : RecyclerView.Adapter<CoinAdapter.
     class CoinViewHolder(private val binding: ItemCoinBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        lateinit var favoriteButton: FloatingActionButton
+
         fun bind(inCoin: Coin) {
             binding.coin = inCoin
+            favoriteButton = binding.favButton
         }
 
-        fun onClick(listener: CoinClickListener, inCoin: Coin) {
-            binding.favButton.setOnClickListener {
-                listener.onCoinClick(inCoin)
-            }
-        }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinViewHolder {
@@ -37,11 +37,15 @@ open class CoinAdapter @Inject constructor() : RecyclerView.Adapter<CoinAdapter.
 
     override fun onBindViewHolder(holder: CoinViewHolder, position: Int) {
         val coin = coins[position]
+        holder.bind(coin)
         clickListener?.let {
-            holder.onClick(it, coin)
+            holder.favoriteButton.setOnClickListener {
+                coin.favorite = !coin.favorite
+                notifyItemChanged(position)
+                clickListener!!.onCoinClick(coin)
+            }
         }
 
-        holder.bind(coin)
     }
 
     override fun getItemCount(): Int {

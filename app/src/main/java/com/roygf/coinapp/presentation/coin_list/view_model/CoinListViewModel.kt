@@ -24,6 +24,38 @@ class CoinListViewModel @Inject constructor(
         getCoins()
     }
 
+    fun makeFavoriteCoin(coin: Coin?) {
+        if (coin == null) {
+            return
+        }
+        viewModelScope.launch {
+            saveFavoriteCoinUseCase.invoke(coin)
+        }
+    }
+
+    fun sortAlphabetically() {
+        viewModelScope.launch {
+            loading.postValue(true)
+            val response = getCoinsListUseCase.invoke()
+            response?.let { list ->
+
+                coins.postValue(list.sortedBy { it.name})
+            }
+            loading.postValue(false)
+        }
+    }
+
+    fun sortByPrice() {
+        viewModelScope.launch {
+            loading.postValue(true)
+            val response = getCoinsListUseCase.invoke()
+            response?.let {list ->
+                coins.postValue(list.sortedBy { it.price })
+            }
+            loading.postValue(false)
+        }
+    }
+
     private fun getCoins() {
         viewModelScope.launch {
             loading.postValue(true)
@@ -34,15 +66,4 @@ class CoinListViewModel @Inject constructor(
             loading.postValue(false)
         }
     }
-
-    fun makeFavoriteCoin(coin: Coin?) {
-        if (coin == null) {
-            return
-        }
-        viewModelScope.launch {
-            saveFavoriteCoinUseCase.invoke(coin)
-        }
-        getCoins()
-    }
-
 }
