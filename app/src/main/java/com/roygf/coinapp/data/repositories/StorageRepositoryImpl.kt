@@ -24,4 +24,12 @@ class StorageRepositoryImpl @Inject constructor(private val dao: AppDatabaseDao)
         }
     }
 
+    override suspend fun removeFavoriteCoin(coin: Coin?) {
+        withContext(Dispatchers.IO) {
+            coin?.let {
+                dao.removeCoin(it)
+            }
+        }
+    }
+
 }

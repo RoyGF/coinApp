@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.roygf.coinapp.R
+import com.roygf.coinapp.core.Coin
 import com.roygf.coinapp.databinding.FragmentFirstBinding
 import com.roygf.coinapp.presentation.coin_list.common.adapters.CoinAdapter
 import com.roygf.coinapp.presentation.coin_list.common.adapters.CoinClickListener
@@ -34,7 +35,6 @@ class FirstFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     var handler: Handler = Handler()
     var runnable: Runnable? = null
-    var delay = 10000
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -46,7 +46,7 @@ class FirstFragment : Fragment(), AdapterView.OnItemSelectedListener {
         recyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         coinAdapter.setListener(CoinClickListener {
-            coinListViewModel.makeFavoriteCoin(it)
+            coinListViewModel.toggleFavCoin(it)
         })
         recyclerView.adapter = coinAdapter
 
@@ -85,9 +85,9 @@ class FirstFragment : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onResume() {
 
         handler.postDelayed(Runnable {
-            handler.postDelayed(runnable!!, delay.toLong())
+            handler.postDelayed(runnable!!, 60000.toLong())
             coinListViewModel.refreshCoinList()
-        }.also { runnable = it }, delay.toLong())
+        }.also { runnable = it }, 60000.toLong())
 
         super.onResume()
     }
@@ -117,4 +117,5 @@ class FirstFragment : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onNothingSelected(parent: AdapterView<*>?) {
         //not implemented
     }
+
 }

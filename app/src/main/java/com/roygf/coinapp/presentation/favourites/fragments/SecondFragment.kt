@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.roygf.coinapp.R
 import com.roygf.coinapp.databinding.FragmentSecondBinding
 import com.roygf.coinapp.presentation.coin_list.common.adapters.CoinAdapter
+import com.roygf.coinapp.presentation.coin_list.common.adapters.CoinClickListener
 import com.roygf.coinapp.presentation.favourites.view_model.FavouritesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -38,6 +39,9 @@ class SecondFragment : Fragment() {
 
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        coinAdapter.setListener(CoinClickListener {
+            favouritesViewModel.removeFavoriteCoin(it)
+        })
         recyclerView.adapter = coinAdapter
 
         return binding.root

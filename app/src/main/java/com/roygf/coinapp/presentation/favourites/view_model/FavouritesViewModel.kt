@@ -5,13 +5,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.roygf.coinapp.core.Coin
 import com.roygf.coinapp.domain.use_cases.GetFavoriteCoinsUseCase
+import com.roygf.coinapp.domain.use_cases.RemoveFavouriteCoinUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class FavouritesViewModel @Inject constructor(
-    private val getFavoriteCoinsUseCase: GetFavoriteCoinsUseCase
+    private val getFavoriteCoinsUseCase: GetFavoriteCoinsUseCase,
+    private val removeFavouriteCoinUseCase: RemoveFavouriteCoinUseCase,
 ) : ViewModel() {
 
     var coins = MutableLiveData<List<Coin>>()
@@ -25,6 +27,17 @@ class FavouritesViewModel @Inject constructor(
                 coins.postValue(it)
             }
             loading.postValue(false)
+        }
+    }
+
+    fun removeFavoriteCoin(coin: Coin?) {
+        coin?.let {
+            viewModelScope.launch {
+                loading.postValue(true)
+                removeFavouriteCoinUseCase.invoke(it)
+                getFavoriteCoins()
+                loading.postValue(false)
+            }
         }
     }
 

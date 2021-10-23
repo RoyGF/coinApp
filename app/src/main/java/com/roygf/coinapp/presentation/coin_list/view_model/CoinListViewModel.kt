@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.roygf.coinapp.core.Coin
 import com.roygf.coinapp.domain.use_cases.GetCoinsListUseCase
 import com.roygf.coinapp.domain.use_cases.RefreshCoinListUseCase
+import com.roygf.coinapp.domain.use_cases.RemoveFavouriteCoinUseCase
 import com.roygf.coinapp.domain.use_cases.SaveFavoriteCoinUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -16,6 +17,7 @@ class CoinListViewModel @Inject constructor(
     private val getCoinsListUseCase: GetCoinsListUseCase,
     private val saveFavoriteCoinUseCase: SaveFavoriteCoinUseCase,
     private val refreshCoinListUseCase: RefreshCoinListUseCase,
+    private val removeFavouriteCoinUseCase: RemoveFavouriteCoinUseCase,
 ) :
     ViewModel() {
 
@@ -26,12 +28,30 @@ class CoinListViewModel @Inject constructor(
         getCoins()
     }
 
-    fun makeFavoriteCoin(coin: Coin?) {
+    fun toggleFavCoin(coin: Coin?) {
+        coin?.let {
+            if (!coin.favorite) {
+                removeFavoriteCoin(it)
+            } else {
+                makeFavoriteCoin(it)
+            }
+        }
+    }
+
+    private fun makeFavoriteCoin(coin: Coin?) {
         if (coin == null) {
             return
         }
         viewModelScope.launch {
             saveFavoriteCoinUseCase.invoke(coin)
+        }
+    }
+
+    private fun removeFavoriteCoin(coin: Coin?) {
+        coin?.let {
+            viewModelScope.launch {
+                removeFavouriteCoinUseCase.invoke(it)
+            }
         }
     }
 
