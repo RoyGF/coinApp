@@ -7,10 +7,8 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.roygf.coinapp.R
 import com.roygf.coinapp.databinding.FragmentSecondBinding
 import com.roygf.coinapp.presentation.coin_list.common.adapters.CoinAdapter
 import com.roygf.coinapp.presentation.coin_list.common.adapters.CoinClickListener
@@ -38,7 +36,8 @@ class SecondFragment : Fragment() {
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
 
         recyclerView = binding.recyclerView
-        recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        recyclerView.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         coinAdapter.setListener(CoinClickListener {
             favouritesViewModel.removeFavoriteCoin(it)
         })
@@ -59,7 +58,6 @@ class SecondFragment : Fragment() {
         favouritesViewModel.coins.observe(viewLifecycleOwner, {
             coinAdapter.setCoins(it)
         })
-
     }
 
     override fun onDestroyView() {

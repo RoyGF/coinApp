@@ -1,6 +1,5 @@
 package com.roygf.coinapp.core
 
-import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
@@ -43,10 +42,10 @@ fun loadPriceText(textView: TextView, value: Double?) {
 }
 
 @BindingAdapter("favIcon")
-fun loadIcon(floatingActionButton: FloatingActionButton, favorite: Boolean) {
-    if(favorite) {
-        floatingActionButton.setImageResource(R.drawable.ic_favorite_selected)
-    } else{
-        floatingActionButton.setImageResource(R.drawable.ic_favorite_unselected)
+fun loadIcon(imageView: ImageView, favorite: Boolean) {
+    if (favorite) {
+        imageView.setImageResource(R.drawable.ic_favorite_selected)
+    } else {
+        imageView.setImageResource(R.drawable.ic_favorite_unselected)
     }
 }

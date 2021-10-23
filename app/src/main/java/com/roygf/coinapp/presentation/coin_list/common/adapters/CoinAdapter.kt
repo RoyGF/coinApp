@@ -2,6 +2,7 @@ package com.roygf.coinapp.presentation.coin_list.common.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -18,7 +19,7 @@ open class CoinAdapter @Inject constructor() : RecyclerView.Adapter<CoinAdapter.
     class CoinViewHolder(private val binding: ItemCoinBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        lateinit var favoriteButton: FloatingActionButton
+        lateinit var favoriteButton: ImageView
 
         fun bind(inCoin: Coin) {
             binding.coin = inCoin

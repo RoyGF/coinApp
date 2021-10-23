@@ -14,7 +14,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.roygf.coinapp.R
-import com.roygf.coinapp.core.Coin
 import com.roygf.coinapp.databinding.FragmentFirstBinding
 import com.roygf.coinapp.presentation.coin_list.common.adapters.CoinAdapter
 import com.roygf.coinapp.presentation.coin_list.common.adapters.CoinClickListener
@@ -58,32 +57,26 @@ class FirstFragment : Fragment(), AdapterView.OnItemSelectedListener {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spinner.adapter = adapter
         }
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        coinListViewModel.onCreate()
-
         coinListViewModel.coins.observe(viewLifecycleOwner, {
             coinAdapter.setCoins(it)
         })
-
         coinListViewModel.loading.observe(viewLifecycleOwner, {
             binding.loadingProgress.isVisible = it
         })
-
         binding.spinner.onItemSelectedListener = this
-
         binding.favButton.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
     }
 
     override fun onResume() {
-
+        coinListViewModel.refreshCoinList()
         handler.postDelayed(Runnable {
             handler.postDelayed(runnable!!, 60000.toLong())
             coinListViewModel.refreshCoinList()
@@ -104,7 +97,7 @@ class FirstFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
         if (pos == 0) {
-            coinListViewModel.onCreate()
+            coinListViewModel.getCoins()
         }
         if (pos == 1) {
             coinListViewModel.sortByPrice()

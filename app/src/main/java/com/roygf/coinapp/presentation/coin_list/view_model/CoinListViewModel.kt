@@ -24,10 +24,6 @@ class CoinListViewModel @Inject constructor(
     var coins = MutableLiveData<List<Coin>>()
     var loading = MutableLiveData<Boolean>()
 
-    fun onCreate() {
-        getCoins()
-    }
-
     fun toggleFavCoin(coin: Coin?) {
         coin?.let {
             if (!coin.favorite) {
@@ -55,12 +51,22 @@ class CoinListViewModel @Inject constructor(
         }
     }
 
+    fun getCoins() {
+        viewModelScope.launch {
+            loading.postValue(true)
+            val response = getCoinsListUseCase.invoke()
+            response?.let {
+                coins.postValue(it)
+            }
+            loading.postValue(false)
+        }
+    }
+
     fun sortAlphabetically() {
         viewModelScope.launch {
             loading.postValue(true)
             val response = getCoinsListUseCase.invoke()
             response?.let { list ->
-
                 coins.postValue(list.sortedBy { it.name })
             }
             loading.postValue(false)
@@ -84,17 +90,6 @@ class CoinListViewModel @Inject constructor(
             val response = refreshCoinListUseCase.invoke()
             response?.let { list ->
                 coins.postValue(list)
-            }
-            loading.postValue(false)
-        }
-    }
-
-    private fun getCoins() {
-        viewModelScope.launch {
-            loading.postValue(true)
-            val response = getCoinsListUseCase.invoke()
-            response?.let {
-                coins.postValue(it)
             }
             loading.postValue(false)
         }
