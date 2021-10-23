@@ -1,6 +1,7 @@
 package com.roygf.coinapp.presentation.coin_list.fragments
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import com.roygf.coinapp.R
 import com.roygf.coinapp.databinding.FragmentFirstBinding
 import com.roygf.coinapp.presentation.coin_list.common.adapters.CoinAdapter
@@ -26,12 +26,15 @@ class FirstFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private var _binding: FragmentFirstBinding? = null
     private val binding get() = _binding!!
-
     private val coinListViewModel: CoinListViewModel by viewModels()
     private lateinit var recyclerView: RecyclerView
 
     @Inject
     lateinit var coinAdapter: CoinAdapter
+
+    var handler: Handler = Handler()
+    var runnable: Runnable? = null
+    var delay = 10000
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -77,6 +80,21 @@ class FirstFragment : Fragment(), AdapterView.OnItemSelectedListener {
         binding.favButton.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
+    }
+
+    override fun onResume() {
+
+        handler.postDelayed(Runnable {
+            handler.postDelayed(runnable!!, delay.toLong())
+            coinListViewModel.refreshCoinList()
+        }.also { runnable = it }, delay.toLong())
+
+        super.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        handler.removeCallbacks(runnable!!)
     }
 
     override fun onDestroyView() {

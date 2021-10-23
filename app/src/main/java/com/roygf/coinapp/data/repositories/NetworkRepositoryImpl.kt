@@ -8,7 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class NetworkRepositoryImpl @Inject constructor(private val api:Api) : NetworkRepository{
+class NetworkRepositoryImpl @Inject constructor(private val api: Api) : NetworkRepository {
 
     override suspend fun getCoins(): List<Coin> {
         return withContext(Dispatchers.IO) {
@@ -16,6 +16,14 @@ class NetworkRepositoryImpl @Inject constructor(private val api:Api) : NetworkRe
                 val response = api.getCoins()
                 CoinCache.coinList = response.coins ?: emptyList()
             }
+            CoinCache.coinList
+        }
+    }
+
+    override suspend fun refreshCoins(): List<Coin> {
+        return withContext(Dispatchers.IO) {
+            val response = api.getCoins()
+            CoinCache.coinList = response.coins ?: emptyList()
             CoinCache.coinList
         }
     }

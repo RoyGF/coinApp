@@ -23,6 +23,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:name=".presentation.coin_list.receivers.UpdateService" android:process=":remote"/>
+        <receiver android:name=".presentation.coin_list.receivers.UpdateReceiver" android:process=":remote"/>
     </application>
 
 </manifest>

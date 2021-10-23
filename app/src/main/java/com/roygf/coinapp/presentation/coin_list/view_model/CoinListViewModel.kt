@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.roygf.coinapp.core.Coin
 import com.roygf.coinapp.domain.use_cases.GetCoinsListUseCase
+import com.roygf.coinapp.domain.use_cases.RefreshCoinListUseCase
 import com.roygf.coinapp.domain.use_cases.SaveFavoriteCoinUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -13,7 +14,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CoinListViewModel @Inject constructor(
     private val getCoinsListUseCase: GetCoinsListUseCase,
-    private val saveFavoriteCoinUseCase: SaveFavoriteCoinUseCase
+    private val saveFavoriteCoinUseCase: SaveFavoriteCoinUseCase,
+    private val refreshCoinListUseCase: RefreshCoinListUseCase,
 ) :
     ViewModel() {
 
@@ -39,7 +41,7 @@ class CoinListViewModel @Inject constructor(
             val response = getCoinsListUseCase.invoke()
             response?.let { list ->
 
-                coins.postValue(list.sortedBy { it.name})
+                coins.postValue(list.sortedBy { it.name })
             }
             loading.postValue(false)
         }
@@ -49,8 +51,19 @@ class CoinListViewModel @Inject constructor(
         viewModelScope.launch {
             loading.postValue(true)
             val response = getCoinsListUseCase.invoke()
-            response?.let {list ->
+            response?.let { list ->
                 coins.postValue(list.sortedBy { it.price })
+            }
+            loading.postValue(false)
+        }
+    }
+
+    fun refreshCoinList() {
+        viewModelScope.launch {
+            loading.postValue(true)
+            val response = refreshCoinListUseCase.invoke()
+            response?.let { list ->
+                coins.postValue(list)
             }
             loading.postValue(false)
         }
